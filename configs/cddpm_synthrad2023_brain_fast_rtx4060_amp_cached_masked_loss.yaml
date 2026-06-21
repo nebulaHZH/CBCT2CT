@@ -1,0 +1,41 @@
+seed: 42
+experiment:
+  name: cddpm_synthrad2023_brain_fast_rtx4060_amp_cached_masked_loss
+data:
+  train_manifest: manifests/synthrad2023/task2_brain_train.jsonl
+  hu_min: -1000.0
+  hu_max: 2000.0
+  axis: 2
+  min_mask_pixels: 32
+  max_slices_per_case: 64
+  case_block_size: 8
+model:
+  name: official_cddpm
+  official_repo: https://github.com/junbopeng/conditional_DDPM
+  paper_doi: 10.1002/mp.16704
+  base_channels: 64
+  channel_mults: [1, 2, 3, 4]
+  attention_levels: []
+  num_res_blocks: 2
+  dropout: 0.3
+  timesteps: 1000
+  beta_start: 0.0001
+  beta_end: 0.02
+  loss: masked_mse_mean
+training:
+  device: cuda
+  epochs: 50
+  batch_size: 2
+  lr: 0.0001
+  weight_decay: 0.0001
+  num_workers: 0
+  mixed_precision: true
+  timing_every: 50
+  checkpoint_dir: runs/cddpm_synthrad2023_brain_fast_rtx4060_amp_cached_masked_loss/checkpoints
+  save_every: 2
+validation:
+  every: 20
+  num_slices: 2
+  output_dir: runs/cddpm_synthrad2023_brain_fast_rtx4060_amp_cached_masked_loss/validation
+inference:
+  device: cuda
